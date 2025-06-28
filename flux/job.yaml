@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: profile-update-job-e0c76dc
+  namespace: profile
+spec:
+  ttlSecondsAfterFinished: 200
+  backoffLimit: 4
+  template:
+    spec:
+      restartPolicy: OnFailure
+      initContainers:
+        - name: git-clone
+          image: alpine/git:2.49.0
+          command: ["/bin/sh", "-c"]
+          args: 
+            - |
+              rm -rf /repo/*
+              mkdir -p /repo
+              cd /repo
+              git clone --depth 1 https://github.com/FTEmulator/profile .
+          volumeMounts:
+            - name: repo-volume
+              mountPath: /repo
+      containers:
+        - name: sync
+          image: "gradle:8.7.0-jdk21"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              rm -rf /mnt/profile/*
+              cd /repo
+              chmod +x gradlew
+              ./gradlew bootJar
+              cp -r ./build/libs/*.jar /mnt/profile/app.jar
+              chmod +x /mnt/profile/app.jar
+              kubectl -n profile rollout restart deployment profile
+              echo "La api se actualizo correctamente"
+          volumeMounts:
+            - name: profile-volume
+              mountPath: /mnt/profile/
+            - name: repo-volume
+              mountPath: /repo
+      volumes:
+        - name: profile-volume
+          persistentVolumeClaim:
+            claimName: profile-pvc
+        - name: repo-volume
+          emptyDir: {}
