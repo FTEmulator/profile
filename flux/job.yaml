@@ -24,18 +24,33 @@ spec:
               mountPath: /repo
       containers:
         - name: sync
-          image: "gradle:8.7.0-jdk21"
+          image: "ubuntu:22.04"
           command: ["/bin/sh", "-c"]
           args:
             - |
-              rm -rf /mnt/profile/*
-              cd /repo
-              chmod +x gradlew
-              ./gradlew bootJar
-              cp -r ./build/libs/*.jar /mnt/profile/app.jar
-              chmod +x /mnt/profile/app.jar
-              kubectl -n profile rollout restart deployment profile
-              echo "La api se actualizo correctamente"
+              set -e
+              apt-get update && \
+              apt-get install -y curl wget unzip git openjdk-21-jdk && \
+              export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 && \
+              export PATH=$JAVA_HOME/bin:$PATH && \
+              
+              GRADLE_VERSION=8.7 && \
+              wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
+              unzip gradle-${GRADLE_VERSION}-bin.zip -d /opt && \
+              export PATH=/opt/gradle-${GRADLE_VERSION}/bin:$PATH && \
+
+              KUBECTL_VERSION=$(curl -s https://dl.k8s.io/release/stable.txt) && \
+              curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
+              install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
+
+              rm -rf /mnt/profile/* && \
+              cd /repo && \
+              chmod +x gradlew && \
+              ./gradlew bootJar && \
+              cp -r ./build/libs/*.jar /mnt/profile/app.jar && \
+              chmod +x /mnt/profile/app.jar && \
+              kubectl -n profile rollout restart deployment profile && \
+              echo "La API se actualizó correctamente"
           volumeMounts:
             - name: profile-volume
               mountPath: /mnt/profile/
