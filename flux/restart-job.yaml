@@ -13,4 +13,4 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl -n api rollout restart deployment profile
+            - kubectl -n profile rollout restart deployment profile
