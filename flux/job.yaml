@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: profile-update-job-2daf8c9
+  name: profile-update-job-7f18536
   namespace: profile
 spec:
   ttlSecondsAfterFinished: 200
