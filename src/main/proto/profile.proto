@@ -1,24 +1,28 @@
 syntax = "proto3";
 option java_package = "com.FTEmulator.profile.grpc";
 
-service Utils {
+service Profile {
+
     rpc ProfileStatus (ProfileStatusRequest) returns (ProfileStatusResponse);
 
-    rpc GetUserTest (getTestRequest) returns (getTestResponse);
+    rpc GetUser(UserRequest) returns (UserResponse);
+
 }
 
+// Status
 message ProfileStatusRequest {}
 
 message ProfileStatusResponse {
     bool ok = 1;
 }
 
-message getTestRequest {}
+// Get user
+message UserRequest {
+    string userId = 1;
+}
 
-message getTestResponse {
-    string id = 1;
+message UserResponse {
+    string userId = 1;
     string name = 2;
     string email = 3;
-    string country = 4;
-    string status = 5;
 }
