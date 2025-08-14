@@ -14,7 +14,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    // Get user
     public User getById(UUID id) {
         return userRepository.findById(id).orElse(null);
     }
+
+    // Register user
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
 }
