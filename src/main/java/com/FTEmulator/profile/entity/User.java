@@ -2,7 +2,12 @@ package com.FTEmulator.profile.entity;
 
 import java.util.UUID;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -24,7 +29,7 @@ public class User {
     private String country;
 
     @Column
-    private Short experience;
+    private Long experience;
 
     @Column(length = 100)
     private String photo;
@@ -48,8 +53,8 @@ public class User {
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
 
-    public Short getExperience() { return experience; }
-    public void setExperience(Short experience) { this.experience = experience; }
+    public Long getExperience() { return experience; }
+    public void setExperience(Long experience) { this.experience = experience; }
 
     public String getPhoto() { return photo; }
     public void setPhoto(String photo) { this.photo = photo; }
