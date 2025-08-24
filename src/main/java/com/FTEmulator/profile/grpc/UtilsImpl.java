@@ -84,7 +84,7 @@ public class UtilsImpl extends ProfileGrpc.ProfileImplBase {
 
     // Register user
     @Override
-    public void  createUser(RegisterUserRequest userData, StreamObserver<RegisterUserResponse> responseObserver) {
+    public void createUser(RegisterUserRequest userData, StreamObserver<RegisterUserResponse> responseObserver) {
         try {
             // Encript password
             String encripted = stringEncryptor.encrypt(userData.getPassword());
