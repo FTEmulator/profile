@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.FTEmulator.profile.entity.User;
@@ -25,6 +26,11 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    // Get User by email
+    public User GetByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
     // Register user
     public User createUser(User user) {
         return userRepository.save(user);
@@ -33,22 +39,14 @@ public class UserService {
     // Login
     public LoginResponse login(String email, String password) {
         Optional<User> userOpt = userRepository.findByEmail(email);
-
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            
-            // Decrypt
-            String decryptedPassword = stringEncryptor.decrypt(user.getPassword());
-
+        if (userOpt.isPresent()) { User user = userOpt.get();
             // Compare passwords
-            if (decryptedPassword.equals(password)) {
+            if (BCrypt.checkpw(password, user.getPassword())) {
                 return LoginResponse.newBuilder()
                     .setUserId(user.getId().toString())
                     .build();
             }
         }
-
-        return null;
+        return LoginResponse.newBuilder() .setUserId("invalid") .build();
     }
-
 }

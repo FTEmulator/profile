@@ -47,6 +47,7 @@ message RegisterUserRequest {
 
 message RegisterUserResponse {
     bool created = 1;
+    string userId = 2;
 }
 
 // Login

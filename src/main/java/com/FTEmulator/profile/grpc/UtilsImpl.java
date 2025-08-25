@@ -3,7 +3,7 @@ package com.FTEmulator.profile.grpc;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import org.jasypt.encryption.StringEncryptor;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
@@ -26,9 +26,6 @@ public class UtilsImpl extends ProfileGrpc.ProfileImplBase {
 
     @Autowired
     private UserService userService;
-    
-    @Autowired
-    private StringEncryptor stringEncryptor;
 
     // Status
     @Override
@@ -88,27 +85,44 @@ public class UtilsImpl extends ProfileGrpc.ProfileImplBase {
     @Override
     public void createUser(RegisterUserRequest userData, StreamObserver<RegisterUserResponse> responseObserver) {
         try {
-            // Encript password
-            String encripted = stringEncryptor.encrypt(userData.getPassword());
+            // Encriptar password
+            String encrypted = BCrypt.hashpw(userData.getPassword(), BCrypt.gensalt());
 
-            // Set data
+            // Crear objeto User y asignar campos
             User user = new User();
             user.setName(userData.getName());
             user.setEmail(userData.getEmail());
-            user.setPassword(encripted);
-            user.setCountry(userData.getCountry());
-            if (!userData.getCountry().isEmpty()) user.setCountry(userData.getCountry());
-            if (userData.getExperience() > 0) user.setExperience(userData.getExperience());
-            if (!userData.getPhoto().isEmpty()) user.setPhoto(userData.getPhoto());
-            if (!userData.getBiography().isEmpty()) user.setBiography(userData.getBiography());
+            user.setPassword(encrypted);
 
-            // Insert user to database
+            if (userData.getCountry() != null && !userData.getCountry().isEmpty()) {
+                user.setCountry(userData.getCountry());
+            }
+            if (userData.getExperience() > 0) {
+                user.setExperience(userData.getExperience());
+            }
+            if (userData.getPhoto() != null && !userData.getPhoto().isEmpty()) {
+                user.setPhoto(userData.getPhoto());
+            }
+            if (userData.getBiography() != null && !userData.getBiography().isEmpty()) {
+                user.setBiography(userData.getBiography());
+            }
+
+            // Insert uset into database
             userService.createUser(user);
 
-            // Return 201 status (created)
-            RegisterUserResponse response = RegisterUserResponse.newBuilder().setCreated(true).build();
+            // Get user
+            User createdUser = userService.GetByEmail(userData.getEmail());
+
+            // gRPC response
+            RegisterUserResponse response = RegisterUserResponse.newBuilder()
+                .setCreated(true)
+                .setUserId(createdUser.getId().toString())
+                .build();
+
+            // send response
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+
         } catch (Exception e) {
             responseObserver.onError(
                 Status.INTERNAL.withDescription("Error al crear usuario: " + e.getMessage())
@@ -116,6 +130,7 @@ public class UtilsImpl extends ProfileGrpc.ProfileImplBase {
             );
         }
     }
+
 
     // Login
     @Override
