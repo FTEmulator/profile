@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
 import com.FTEmulator.profile.entity.User;
+import com.FTEmulator.profile.grpc.ProfileOuterClass.LoginRequest;
+import com.FTEmulator.profile.grpc.ProfileOuterClass.LoginResponse;
 import com.FTEmulator.profile.grpc.ProfileOuterClass.ProfileStatusRequest;
 import com.FTEmulator.profile.grpc.ProfileOuterClass.ProfileStatusResponse;
 import com.FTEmulator.profile.grpc.ProfileOuterClass.RegisterUserRequest;
@@ -110,6 +112,26 @@ public class UtilsImpl extends ProfileGrpc.ProfileImplBase {
         } catch (Exception e) {
             responseObserver.onError(
                 Status.INTERNAL.withDescription("Error al crear usuario: " + e.getMessage())
+                            .asRuntimeException()
+            );
+        }
+    }
+
+    // Login
+    @Override
+    public void login(LoginRequest userData, StreamObserver<LoginResponse> responseObserver) {
+        try {
+
+            // Compare and get the userId
+            LoginResponse userId = userService.login(userData.getEmail(), userData.getPassword());
+
+            // Send response
+            responseObserver.onNext(userId);
+            responseObserver.onCompleted();
+            
+        } catch (Exception e) {
+            responseObserver.onError(
+                Status.INTERNAL.withDescription("Error al verificar el usuario: " + e.getMessage())
                             .asRuntimeException()
             );
         }
