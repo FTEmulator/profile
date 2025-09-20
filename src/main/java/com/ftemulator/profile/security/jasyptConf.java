@@ -1,4 +1,4 @@
-package com.FTEmulator.profile.security;
+package com.ftemulator.profile.security;
 
 import java.security.SecureRandom;
 

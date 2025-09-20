@@ -1,22 +1,21 @@
-package com.FTEmulator.profile.service;
+package com.ftemulator.profile.service;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import com.FTEmulator.profile.entity.User;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.LoginResponse;
-import com.FTEmulator.profile.repository.UserRepository;
+import com.ftemulator.profile.grpc.ProfileOuterClass.LoginResponse;
+import com.ftemulator.profile.entity.User;
+import com.ftemulator.profile.repository.UserRepository;
 
 @Service
 public class UserService {
     
-    @Autowired
-    private StringEncryptor stringEncryptor;
+    // @Autowired
+    // private StringEncryptor stringEncryptor;
     
     @Autowired
     private UserRepository userRepository;

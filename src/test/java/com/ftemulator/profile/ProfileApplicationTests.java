@@ -1,4 +1,4 @@
-package com.FTEmulator.profile;
+package com.ftemulator.profile;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

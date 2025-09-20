@@ -1,4 +1,4 @@
-package com.FTEmulator.profile.entity;
+package com.ftemulator.profile.entity;
 
 import java.util.UUID;
 

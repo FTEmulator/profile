@@ -26,4 +26,4 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git add flux/job.yaml
           git commit -m "Update Job name for commit $COMMIT_HASH" || echo "No changes to commit"
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/FTEmulator/profile.git HEAD:main
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/ftemulator/profile.git HEAD:main

@@ -1,4 +1,4 @@
-package com.FTEmulator.profile.grpc;
+package com.ftemulator.profile.grpc;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -7,16 +7,16 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
-import com.FTEmulator.profile.entity.User;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.LoginRequest;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.LoginResponse;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.ProfileStatusRequest;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.ProfileStatusResponse;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.RegisterUserRequest;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.RegisterUserResponse;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.UserRequest;
-import com.FTEmulator.profile.grpc.ProfileOuterClass.UserResponse;
-import com.FTEmulator.profile.service.UserService;
+import com.ftemulator.profile.entity.User;
+import com.ftemulator.profile.grpc.ProfileOuterClass.LoginRequest;
+import com.ftemulator.profile.grpc.ProfileOuterClass.LoginResponse;
+import com.ftemulator.profile.grpc.ProfileOuterClass.ProfileStatusRequest;
+import com.ftemulator.profile.grpc.ProfileOuterClass.ProfileStatusResponse;
+import com.ftemulator.profile.grpc.ProfileOuterClass.RegisterUserRequest;
+import com.ftemulator.profile.grpc.ProfileOuterClass.RegisterUserResponse;
+import com.ftemulator.profile.grpc.ProfileOuterClass.UserRequest;
+import com.ftemulator.profile.grpc.ProfileOuterClass.UserResponse;
+import com.ftemulator.profile.service.UserService;
 
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;

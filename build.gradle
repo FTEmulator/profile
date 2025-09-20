@@ -5,7 +5,7 @@ plugins {
 	id 'com.google.protobuf' version '0.9.4'
 }
 
-group = 'com.FTEmulator'
+group = 'com.ftemulator'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -29,12 +29,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'io.grpc:grpc-services'
+	implementation "io.grpc:grpc-services:1.66.0"
 	implementation 'org.springframework.grpc:spring-grpc-spring-boot-starter'
 	testImplementation 'org.springframework.grpc:spring-grpc-test'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   	implementation 'org.postgresql:postgresql'
-	implementation("org.jasypt:jasypt:1.9.2")
+	implementation 'org.jasypt:jasypt:1.9.3'
 	implementation 'org.mindrot:jbcrypt:0.4'
 }
 
@@ -45,23 +45,24 @@ dependencyManagement {
 }
 
 protobuf {
-	protoc {
-		artifact = 'com.google.protobuf:protoc'
-	}
-	plugins {
-		grpc {
-			artifact = 'io.grpc:protoc-gen-grpc-java'
-		}
-	}
-	generateProtoTasks {
-		all()*.plugins {
-			grpc {
-				option 'jakarta_omit'
-				option '@generated=omit'
-			}
-		}
-	}
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.3"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.66.0"
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {
+                option 'jakarta_omit'
+                option '@generated=omit'
+            }
+        }
+    }
 }
+
 
 bootJar {
 	archiveBaseName.set("app")

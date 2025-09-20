@@ -1,11 +1,11 @@
-package com.FTEmulator.profile.repository;
+package com.ftemulator.profile.repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.FTEmulator.profile.entity.User;
+import com.ftemulator.profile.entity.User;
 
 // Enables UserRepository to use findAll(), findById(), save(), delete() and more
 public interface UserRepository extends JpaRepository<User, UUID> {
