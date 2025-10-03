@@ -85,6 +85,24 @@ public class UtilsImpl extends ProfileGrpc.ProfileImplBase {
     @Override
     public void createUser(RegisterUserRequest userData, StreamObserver<RegisterUserResponse> responseObserver) {
         try {
+
+            // Check if user already exists
+            User checkUser = null;
+            try {
+                checkUser = userService.GetByEmail(userData.getEmail());
+            } catch (Exception e) {
+                // Si no encuentra el usuario, checkUser queda null
+                checkUser = null;
+            }
+            
+            if (checkUser != null) {
+                responseObserver.onError(
+                    Status.ALREADY_EXISTS.withDescription("User already exists")
+                                .asRuntimeException()
+                );
+                return;
+            }
+
             // Encriptar password
             String encrypted = BCrypt.hashpw(userData.getPassword(), BCrypt.gensalt());
 
